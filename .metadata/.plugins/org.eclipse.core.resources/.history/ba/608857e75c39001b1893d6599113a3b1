@@ -1,0 +1,25 @@
+import java.io.*;
+
+public class Error1{
+
+	public static void main(String[] args)  throws Exception {
+		
+		
+		//FILE HANDLING
+		
+		//
+		FileOutputStream fhand=new FileOutputStream("pass.txt");
+		DataOutputStream file =new DataOutputStream(fhand);
+		file.writeUTF("\nok na start");
+		
+		
+		
+		
+		FileInputStream fhand2 =new FileInputStream("pass.txt");
+		DataInputStream file2=new DataInputStream(fhand2);
+		String abc=file2.readUTF();
+		System.out.println(abc);
+		
+ 	}
+
+}

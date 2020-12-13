@@ -1,0 +1,26 @@
+import java.io.*;
+import java.util.*;
+
+class save implements Serializable{
+	int i;
+}
+
+public class ObjectSavingFiles {
+
+	
+	public static void main(String[] args) throws Exception {
+		
+		save p=new save();
+		p.i=8;
+		
+		
+		File f=new File("ObjectSaving.txt");
+		FileOutputStream file=new FileOutputStream(f);
+		ObjectOutputStream oob=new ObjectOutputStream(file);
+		oob.writeObject(p);
+		
+		FileInputStream 
+	}
+
+}
+

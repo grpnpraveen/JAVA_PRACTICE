@@ -1,0 +1,11 @@
+interface pepople{
+	public void add();
+}
+public abstract class Example implements pepople{
+
+	public static void main(String[] args) {
+		
+
+	}
+
+}

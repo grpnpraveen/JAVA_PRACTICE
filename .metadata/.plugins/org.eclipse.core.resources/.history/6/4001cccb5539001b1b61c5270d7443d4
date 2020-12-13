@@ -1,0 +1,13 @@
+abstract class del{
+	int x;
+	abstract public void cll(); 
+}
+public class Example extends del{
+	int x;
+	
+	public static void main(String[] args) {
+		
+
+	}
+
+}

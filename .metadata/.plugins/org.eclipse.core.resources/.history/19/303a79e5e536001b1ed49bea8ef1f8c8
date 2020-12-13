@@ -1,0 +1,25 @@
+
+class A{
+	public void show()
+	{
+		System.out.println("in a");
+	}
+}
+class B extends A{
+	@Over
+	public void show()
+	{
+		System.out.println("in b");
+	}
+}
+public class praveens {
+
+	
+
+ public static void main (String[] args) {
+
+	 A obj=new B();
+	 obj.show();
+
+ }
+ }

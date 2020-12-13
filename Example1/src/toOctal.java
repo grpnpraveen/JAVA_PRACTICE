@@ -17,7 +17,7 @@ public class toOctal {
 
 	public static void main(String[] args) {
 		
-		System.out.println("octal of 19 is: "+Tooctal(19)); 
+		System.out.println("octal of 20 is: "+Tooctal(20)); 
 		
 }
 

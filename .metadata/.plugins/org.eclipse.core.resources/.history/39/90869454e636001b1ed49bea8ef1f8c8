@@ -1,0 +1,16 @@
+import java.util.LinkedList;
+
+public class praveens {
+
+	
+
+ public static void main (String[] args) {
+
+	 LinkedList<String> obj=new LinkedList<String>();
+	 obj.add("praveen");
+	 foreach(LinkedList r:obj)
+	 {
+		 System.out.println(r);
+	 }
+ }
+ }

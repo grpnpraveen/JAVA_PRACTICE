@@ -1,0 +1,258 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
+public class eFlashCards {
+
+	public static void main(String[] args) {
+		
+		
+	}
+   }
+
+class CardMain extends JFrame {
+	 25
+	 26	//JPanel screen = new CardViewer();
+	 27	private boolean isViewer = false;
+	 28	private boolean isEditor = false;
+	 29	private CardEditor editor;
+	 30	private CardViewer viewer;
+	 31	private static String title = "FlashCards Beta";
+	 32	//private JPanel mainPanel;
+	 33	Deck mainDeck;
+	 34	JFileChooser fileChooser = new JFileChooser();
+	 35	
+	 36	private String help = "Flash Cards Viewer/Editor\nDeveloped by David Gardner 2012-2013\n\n"
+	 37			+"To create a new deck of Flash Cards, press File>New Deck.\n"
+	 38			+"When you are finished editing, press File>Save then View>Viewer to return to the viewer\n"
+	 39			+"To load a previously created deck, press File>Load Deck" 
+	 40			+"and select the file you wish to view/edit\n"
+	 41			+"Once you have loaded a deck, use the View>Viewer\n" +
+	 42			" and the View>Editor options to switch between viewing and editing perspectives.\n" +
+	 43			"When viewing a deck, use the Flip Button to flip over a card, the Next button to \n" +
+	 44			"transition to the next card, Revisit to move a card to the back of the deck \n" +
+	 45			"(this will not count for the Card Total), the Previous button to move to the previous card,\n" +
+	 46			"and the Shuffle button to shuffle the deck (this returns to the first card \n" +
+	 47			"and resets the Card Total.\nTo start with the other side of each card, press Flip Deck.\n" +
+	 48			"Note: While this program does not include options to transfer cards from one deck to another, \n" +
+	 49			"the decks are stored as plain text in the file system so the user could easily do this manually\n" +
+	 50			"(at their own risk of accidently corrupting the data).";
+	 51	
+	 52	public CardMain() {
+	 53		super(title);
+	 54		setSize(700, 410);
+	 55		add(createGUI(), BorderLayout.NORTH);
+	 56		//mainPanel = loadViewer();
+	 57		//isViewer = true;
+	 58		viewer = new CardViewer();
+	 59		editor = new CardEditor(true);
+	 60		loadViewer();
+	 61		//add(mainPanel, BorderLayout.CENTER);
+	 62		//pack();
+	 63		//setResizable(false);
+	 64		setVisible(true);
+	 65		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	 66	}
+	 67	
+	 68	public void setTitle(String title) {
+	 69		super.setTitle(title);
+	 70	}
+	 71	public void updateTitle() {
+	 72		setTitle(mainDeck.toString() + " - " + title);
+	 73	}
+	 74	public void refresh() {
+	 75		super.setVisible(true);
+	 76	}
+	 77	
+	 78	public JMenuBar createGUI() {
+	 79		JMenuBar bar = new JMenuBar();
+	 80		
+	 81		JMenu file = new JMenu("File");
+	 82		//file.setMnemonic('F');
+	 83		JMenu view = new JMenu("View");
+	 84		//view.setMnemonic('V');
+	 85		JMenuItem loadItem = new JMenuItem("Load Deck");
+	 86		loadItem.addActionListener(new ActionListener() {
+	 87			public void actionPerformed(ActionEvent e) {
+	 88				//JFileChooser
+	 89				//String fileName = JOptionPane.showInputDialog("Enter fileName");
+	 90				int retVal = fileChooser.showOpenDialog(CardMain.this);
+	 91				if(retVal == JFileChooser.APPROVE_OPTION) {
+	 92					mainDeck = loadDeck(fileChooser.getSelectedFile());
+	 93					if (mainDeck != null) {
+	 94						viewer.setDeck(mainDeck);
+	 95						editor.setDeck(mainDeck);
+	 96						setTitle(mainDeck.toString()+ " - " + title);
+	 97					}
+	 98				}
+	 99				//mainDeck = loadDeck(fileName.trim());
+	100				//System.out.println(mainDeck.toString());
+	101			}
+	102		});
+	103		file.add(loadItem);
+	104		JMenuItem newItem = new JMenuItem("New Deck");
+	105		newItem.addActionListener(new ActionListener() {
+	106			public void actionPerformed(ActionEvent e) {
+	107				loadEditorNew();
+	108			}
+	109		});
+	110		file.add(newItem);
+	111		JMenuItem editItem = new JMenuItem("Editor");
+	112		editItem.addActionListener(new ActionListener() {
+	113			public void actionPerformed(ActionEvent e) {
+	114				loadEditor();
+	115			}
+	116		});
+	117		view.add(editItem);
+	118		JMenuItem viewItem = new JMenuItem("Viewer");
+	119		viewItem.addActionListener(new ActionListener() {
+	120			public void actionPerformed(ActionEvent e) {
+	121				loadViewer();
+	122			}
+	123		});
+	124		view.add(viewItem);
+	125		JMenuItem helpItem = new JMenuItem("Help");
+	126		helpItem.addActionListener(new ActionListener() {
+	127			public void actionPerformed(ActionEvent e) {
+	128				JOptionPane.showMessageDialog(CardMain.this, help, "Help", JOptionPane.PLAIN_MESSAGE);
+	129			}
+	130		});
+	131		view.add(helpItem);
+	132		JMenuItem saveItem = new JMenuItem("Save");
+	133		saveItem.addActionListener(new ActionListener() {
+	134			public void actionPerformed(ActionEvent e) {
+	135				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+	136				int retVal = fileChooser.showSaveDialog(CardMain.this);
+	137				if(retVal == JFileChooser.APPROVE_OPTION) {
+	138					File dir = fileChooser.getSelectedFile();
+	139					//String path = dir.getAbsolutePath();
+	140					File file = new File(mainDeck.getFullPath(dir.getAbsolutePath()));
+	141					System.out.println(file.getAbsolutePath());
+	142					System.out.println(mainDeck);
+	143					saveDeck(mainDeck, file);
+	144				}
+	145				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	146			}
+	147		});
+	148		file.add(saveItem);
+	149		JMenuItem exitItem = new JMenuItem("Exit");
+	150		exitItem.addActionListener(new ActionListener() {
+	151			public void actionPerformed(ActionEvent e) {
+	152				
+	153				
+	154				System.exit(0);
+	155			}
+	156		});
+	157		file.add(exitItem);
+	158		
+	159		bar.add(file);
+	160		bar.add(view);
+	161		return bar;
+	162	}
+	163	
+	164	public void loadViewer() {
+	165		if (isEditor) {
+	166			editor.cleanUp();
+	167			mainDeck = editor.getDeck();
+	168			remove(editor); 
+	169			updateTitle();
+	170		}
+	171		if (mainDeck != null) {
+	172			viewer = new CardViewer(mainDeck);
+	173		}
+	174		else viewer = new CardViewer();
+	175		
+	176		add(viewer, BorderLayout.CENTER);
+	177		isViewer = true;
+	178		isEditor = false;
+	179		setVisible(true);
+	180		//return new CardViewer();
+	181	}
+	182	
+	183	public void loadEditor() {
+	184		if (mainDeck!=null) {
+	185			editor = new CardEditor(mainDeck);
+	186		}
+	187		else {editor = new CardEditor();}
+	188		if(isViewer) {
+	189			remove(viewer);
+	190		}
+	191		else {
+	192			remove(editor); 
+	193		}
+	194		add(editor, BorderLayout.CENTER);
+	195		isEditor = true;
+	196		isViewer = false;
+	197		//return new CardEditor();
+	198		this.setVisible(true);
+	199	}
+	200	public void loadEditorNew() {
+	201		editor = new CardEditor();
+	202		if(isViewer) {
+	203			remove(viewer); 
+	204		}
+	205		add(editor, BorderLayout.CENTER);
+	206		isViewer = false;
+	207		isEditor = true;
+	208		setVisible(true);
+	209	}
+	210/*	public JPanel loadEditor(Deck deck) {
+	211		isEditor = true;
+	212		isViewer = false;
+	213		return new CardEditor(deck);
+	214	}*/
+	215	
+	216	public static Deck loadDeck(String fileName) {
+	217		return loadDeck(new File(fileName));
+	218	}
+	219	public static Deck loadDeck(File file) {
+	220		Deck deck;
+	221		int i=0;
+	222		ArrayList<String> input = new ArrayList<String>();
+	223		//String input[] = new String[Deck.DECKMAX];
+	224		//File file = new File(fileName);
+	225		Scanner fileIn;
+	226		try {
+	227			fileIn = new Scanner(file);
+	228			//deck = new Deck(fileIn.nextLine());
+	229			while(fileIn.hasNextLine()) {
+	230				input.add(fileIn.nextLine().trim());
+	231				System.out.println(i+": "+input.get(i));
+	232				i++;
+	233				//deck.addCard(new Card(fileIn.nextLine(), fileIn.nextLine()));
+	234			}
+	235		} catch (FileNotFoundException e) {
+	236			System.out.println("Cannot find requested file.");
+	237			JOptionPane.showMessageDialog(null, "Cannot find requested file", "IO Error",
+	238					JOptionPane.ERROR_MESSAGE);
+	239			return null;
+	240			} 
+	241		String[] array = new String[input.size()];
+	242		array = input.toArray(array);
+	243		deck = Deck.constructFromSaveState(array);
+	244		//System.out.println(deck.toString());
+	245		return deck;
+	246	}
+	247	public static void saveDeck(Deck deck, File file) {
+	248		String[] saveState = deck.toSaveState();
+	249		try {
+	250			FileWriter writer = new FileWriter(file, false);
+	251			for(int i=0; i<saveState.length; i++) {
+	252				System.out.println(i + ": " + saveState[i]);
+	253				writer.write(saveState[i]);
+	254			}
+	255			writer.close();
+	256		} catch (IOException e) {
+	257			System.out.println("Cannot open requested file");
+	258			JOptionPane.showMessageDialog(null, "IO Error", "IO Error: Cannot open file",
+	259					JOptionPane.ERROR_MESSAGE);
+	260		}
+	261	}
+	262	
+	263	public static void main(String[] args) {
+	264		new CardMain();
+	265
+	266	}
+	267
+	268}

@@ -1,0 +1,23 @@
+package Ones;
+import java.util.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.lang.*;
+import java.io.*;
+
+class praveen{
+	
+}
+
+
+public class First {
+	
+	
+	public static void main(String args[])
+	{
+		
+	
+	}
+
+}

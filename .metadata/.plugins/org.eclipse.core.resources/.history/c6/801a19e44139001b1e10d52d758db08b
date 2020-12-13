@@ -1,0 +1,60 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+
+public class guipractice implements ActionListener {
+JFrame frame;
+JTextArea text;
+JPanel panel;
+JButton button;
+JRadioButton rbutton;
+JCheckBox checkbox;
+
+int p=0;
+
+	public void go() 
+	{
+		frame=new JFrame("Praveen's");
+		panel=new JPanel();
+		button=new JButton("click");
+		button.addActionListener(this);
+		rbutton=new JRadioButton("First");
+		checkbox=new JCheckBox("SECOND");
+		checkbox.addActionListener(this);
+//		 frame.getContentPane().add(BorderLayout.SOUTH, button);
+		frame.getContentPane().add(button);
+//		frame.getContentPane().add(checkbox);
+//		frame.getContentPane().add(rbutton);
+
+		frame.setSize(300,300);
+		frame.setVisible(true);
+		
+	}
+	public void actionPerformed(ActionEvent e) {
+		if(p%2==0) {
+		checkbox.setText("clicked");
+		button.setText("clicked");}
+		else {
+			checkbox.setText("SECOND");
+			button.setText("Click");
+		}
+		
+		p++;
+		if(p==2)
+		{
+			p=0;
+		}
+	}
+	
+	public static void main(String[] args) {
+		
+		guipractice p=new guipractice();
+		p.go();
+
+
+		
+	}
+
+
+}

@@ -1,0 +1,22 @@
+package Ones;
+import java.util.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.lang.*;
+import java.io.*;
+
+
+
+
+public class First {
+	
+	public static void main(String args[])
+	{
+		
+	for(int i=0;i<9;i++) {
+		System.out.println("fbsfjhv");
+	}
+	}
+
+}

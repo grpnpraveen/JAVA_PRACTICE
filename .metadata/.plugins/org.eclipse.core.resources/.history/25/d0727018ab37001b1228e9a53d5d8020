@@ -1,0 +1,36 @@
+import java.awt.event.*;
+import javax.swing.*;
+
+
+public class Gui3 implements ActionListener {
+
+	JRadioButton button,bub;
+	
+	public void go() 
+	{
+		JFrame frame=new JFrame();
+		button=new JRadioButton("Click Me");
+		button.addActionListener(this);
+		frame.getContentPane().add(button);
+		button=new JRadioButton("Click Me");
+		button.addActionListener(this);
+		frame.getContentPane().add(button);
+		frame.setSize(400,300);
+		frame.setVisible(true);
+	}
+
+	
+	public void actionPerformed(ActionEvent e)
+	{
+		button.setText("YESS");
+	}
+public static void main(String[] args) 
+	{
+		Gui3 g=new Gui3();
+		g.go();
+		
+	}
+
+
+
+}

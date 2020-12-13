@@ -1,0 +1,11 @@
+
+
+public class praveens {
+
+
+ @SuppressWarnings("deprecation")
+public static void main (String[] args) {
+	 
+	 Integer d=new Integer(2);
+ }
+ }

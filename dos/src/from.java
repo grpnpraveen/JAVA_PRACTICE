@@ -1,0 +1,1 @@
+Application class from which JavaFX applications extend. Life-cycle. The entry point for JavaFX applications is the Application class. The JavaFX runtime does the following, in order, whenever an application is launched: Constructs an instance of the specified Application class.

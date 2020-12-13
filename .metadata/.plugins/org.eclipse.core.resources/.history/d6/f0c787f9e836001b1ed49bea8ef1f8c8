@@ -1,0 +1,15 @@
+
+
+public class praveens {
+
+@Deprecated
+void show()
+{
+	
+}
+
+ public static void main (String[] args) {
+	 
+
+ }
+ }

@@ -8,7 +8,7 @@ class hi extends Thread			// here i wrote extends Thread but cannot extend more 
 			System.out.println("hi");
 			try{Thread.sleep(1000);} catch(Exception e) {};
 		}
-}
+		}
 }
 
 class hello extends Thread

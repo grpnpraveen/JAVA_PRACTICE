@@ -1,0 +1,327 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
+public class eFlashCards {
+
+	public static void main(String[] args) {
+		
+		eFlashCards q = new eFlashCards();
+		        q.go();
+		    }
+		    private void go(){
+		        QuizCardBuilder quizCardBuilder = new QuizCardBuilder(new Deck());
+		        quizCardBuilder.build();
+		    }
+
+	}
+    private void buildContentPane(){
+        contentPane = new JPanel();
+        contentPane.setLayout(new BorderLayout());
+        contentPane.setBorder(BorderFactory.createEmptyBorder(5, 15, 0, 15));
+        frame.setContentPane(contentPane);
+    }
+
+    private void buildFrame(){
+        frame = new JFrame("Quiz card Player - " + deck.getFileName());
+        frame.setMinimumSize(MINIMUM_FRAME_SIZE);
+        frame.addWindowListener(
+                new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        closeFrame();
+                    }
+                }
+        );
+    }
+
+    private void buildLabel(){
+        label = new JLabel("Question:");
+        label.setFont(FontConstants.labelFont);
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        contentPane.add(BorderLayout.NORTH, label);
+    }
+
+    private void buildTextArea(){
+        textArea = new JTextArea();
+        textArea.setEditable(false);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setText(deck.getQuizCardList().get(0).getQuestion());
+        textArea.setFont(FontConstants.textAreaFont);
+        JScrollPane jsp = new JScrollPane(textArea);
+        jsp.setAlignmentX(Component.LEFT_ALIGNMENT);
+        contentPane.add(BorderLayout.CENTER, jsp);
+
+    }
+
+    private void closeFrame(){
+        SwingUtilities.invokeLater(frame::dispose);
+        deck.setIsTestRunning(false);
+        deck.setNumCorrect(0);
+        deck.setNumWrong(0);
+        quizCardBuilder.setTextAreaEditability(true);
+        quizCardBuilder.getQuestionText().requestFocusInWindow();
+    }
+
+    private void displayFrame(){
+        frame.setSize(FRAME_SIZE);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
+    /** registerQuizCardBuilder - A callback function that allows an instance of QuizCardPlayer to pass info back to
+     * the specified instance of QuizCardBuilder. */
+    void registerQuizCardBuilder(QuizCardBuilder newQuizCardBuilder){
+        quizCardBuilder = newQuizCardBuilder;
+    }
+
+    /** toFront - brings this frame in the JVM to the front. */
+    void toFront(){
+        SwingUtilities.invokeLater(frame::toFront);
+    }
+
+
+    // LISTENERS
+    private class CorrectButtonListener extends ButtonListener {
+        @Override
+        public void actionPerformed(ActionEvent ev){
+            deck.setNumCorrect(deck.getNumCorrect() + 1);
+            super.actionPerformed(ev);
+        }
+    }
+
+    private class WrongButtonListener extends ButtonListener {
+        // TODO why is it possible to have a public method in a private class?
+        @Override
+        public void actionPerformed(ActionEvent ev){
+            deck.setNumWrong(deck.getNumWrong() + 1);
+            super.actionPerformed(ev);
+        }
+    }
+
+    private class ButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ev){
+            if(deckIndex < deck.getQuizCardList().size()) {
+                if (isAnswerShown) {
+                    showNextCard();
+                } else {
+                    showAnswer();
+                }
+            }else if(deckIndex == deck.getQuizCardList().size()) {
+                showResults();
+            }else{
+                closeFrame();
+            }
+        }
+
+        private void showAnswer(){
+            SwingUtilities.invokeLater(
+                    () -> {
+                        label.setText("Answer:");
+                        textArea.setText(deck.getQuizCardList().get(deckIndex).getAnswer());
+                        isAnswerShown = true;
+                        showAnswerButton.setVisible(false);
+                        correctButton.setVisible(true);
+                        correctButton.requestFocusInWindow();
+                        wrongButton.setVisible(true);
+
+                        deckIndex++;
+                    }
+            );
+        }
+
+        private void showNextCard(){
+            SwingUtilities.invokeLater(
+                    () -> {
+                        label.setText("Question:");
+                        textArea.setText(deck.getQuizCardList().get(deckIndex).getQuestion());
+                        isAnswerShown = false;
+                        showAnswerButton.setText("Show answer");
+                        showAnswerButton.setVisible(true);
+                        showAnswerButton.requestFocusInWindow();
+                        correctButton.setVisible(false);
+                        wrongButton.setVisible(false);
+                    }
+            );
+        }
+
+        private void showResults(){
+            SwingUtilities.invokeLater(
+                    () -> {
+                        label.setText("Results:");
+                        textArea.setText("You got " + deck.getNumCorrect() + " correct and " + deck.getNumWrong() + " wrong.");
+                        showAnswerButton.setText("End");
+                        showAnswerButton.setVisible(true);
+                        showAnswerButton.requestFocusInWindow();
+                        correctButton.setVisible(false);
+                        wrongButton.setVisible(false);
+                        deckIndex++;
+                    }
+            );
+        }
+    }
+}
+
+class Deck {
+    private File file;
+    private List<QuizCard> quizCardList = new ArrayList<>();
+    private String fileName = "Untitled";
+    private boolean isModified;
+    private boolean isTestRunning;
+    private int numCorrect;
+    private int numWrong;
+
+    private static final String QUIZ_CARD_TERMINATOR = "\n29rje2r9\n";
+    private static final String QUIZ_CARD_SEPARATOR = "\te23bf0hj\t";
+
+    /** addQuizCard - creates and adds a QuizCard to quizCardList */
+    void addQuizCard(String q, String a){
+        // Prevents any parsing exceptions occurring when opening a file
+        if(q.length() == 0){
+            q = " ";
+        }
+        if(a.length() == 0){
+            a = " ";
+        }
+        quizCardList.add(new QuizCard(q, a));
+    }
+
+    /** parseData - parses the data from an input String using specified terminators and separators. */
+    private void parseData(String unparsedData) {
+        String[] stageOne = unparsedData.split(QUIZ_CARD_TERMINATOR);
+
+        for (String stageTwo : stageOne) {
+            String[] quizCardData = stageTwo.split(QUIZ_CARD_SEPARATOR);
+            addQuizCard(quizCardData[0], quizCardData[1]);
+        }
+    }
+
+    /** readFile - loads in the data from a saved deck into quizCardList */
+    void readFile(String fileLocation){
+        file = new File(fileLocation);
+        setFileName(file.getName());
+        assert file.canRead();
+        try(BufferedReader input = new BufferedReader(new FileReader(file))){
+            int letterNumber;
+            StringBuilder dataToParse = new StringBuilder();
+            while((letterNumber = input.read()) != -1){
+                dataToParse.append((char) letterNumber);
+            }
+            parseData(dataToParse.toString());
+        }catch(IOException ioEx){
+            ioEx.printStackTrace();
+        }
+    }
+
+    /** save - saves the Deck to specified file location */
+    void save(String fileLocation){
+        file = new File(fileLocation);
+        assert file.canWrite();
+        try (BufferedWriter output = new BufferedWriter(new FileWriter(file))) {
+            for(QuizCard quizCard : quizCardList){
+                output.write(quizCard.getQuestion() + QUIZ_CARD_SEPARATOR + quizCard.getAnswer() + QUIZ_CARD_TERMINATOR);
+            }
+        }catch(IOException ioEx){
+            ioEx.printStackTrace();
+        }
+    }
+
+    /** shuffle - Shuffles the deck in place. If saved, the quiz cards will be saved in the new shuffled order. */
+    void shuffle(){
+        Collections.shuffle(quizCardList);
+    }
+
+
+    // GETTERS
+    String getFileLocation(){
+        return file.getAbsolutePath();
+    }
+
+    String getFileName(){
+        return fileName;
+    }
+
+    boolean getIsModified(){
+        return isModified;
+    }
+
+    boolean getIsTestRunning(){
+        return isTestRunning;
+    }
+
+    int getNumCorrect(){
+        return numCorrect;
+    }
+
+    int getNumWrong(){
+        return numWrong;
+    }
+
+    List<QuizCard> getQuizCardList(){
+        return quizCardList;
+    }
+
+
+    // SETTERS
+    void setFileName(String fileName) {
+        if(fileName.contains(".")){
+            fileName = fileName.split("\\.")[0];
+        }
+        this.fileName = fileName;
+    }
+
+    void setIsModified(boolean newValue){
+        isModified = newValue;
+    }
+
+    void setIsTestRunning(boolean newValue){
+        isTestRunning = newValue;
+    }
+
+    void setNumCorrect(int newValue){
+        numCorrect = newValue;
+    }
+
+    void setNumWrong(int newValue){
+        numWrong = newValue;
+    }
+
+}
+
+class QuizCard {
+    private String question;
+    private String answer;
+
+    public QuizCard(String f, String b){
+        setQuestion(f);
+        setAnswer(b);
+    }
+
+    // GETTERS
+    String getAnswer(){
+        return answer;
+    }
+
+    String getQuestion(){
+        return question;
+    }
+
+
+    // SETTERS
+    void setAnswer(String text){
+        answer = text;
+    }
+
+    void setQuestion(String text){
+        question = text;
+    }
+}
+class FontConstants {
+    public static final Font labelFont = new Font(UIManager.getDefaults().getFont("TabbedPane.font").getFamily(),
+            Font.PLAIN, 14);
+    public static final Font textAreaFont = new Font(UIManager.getDefaults().getFont("TabbedPane.font").getFamily(),
+            Font.PLAIN, 16);
+}

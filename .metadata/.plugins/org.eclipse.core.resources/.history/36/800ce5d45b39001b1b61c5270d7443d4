@@ -1,0 +1,11 @@
+import java.io.*;
+
+public class Error1{
+
+	public static void main(String[] args)  throws Exception {
+		FileOutputStream fhand=new FileOutputStream("password123.txt");
+		DataOutputStream file =new DataOutputStream(fhand);
+		file.writeUTF("ok na start");
+ 	}
+
+}

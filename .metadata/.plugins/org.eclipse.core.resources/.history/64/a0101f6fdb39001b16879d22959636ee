@@ -1,0 +1,12 @@
+import java.io.*;
+public class BufferedReadString {
+	
+	public static void main(String args[]) throws Exception
+	{
+		String s;
+		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+		
+		
+	}
+
+}

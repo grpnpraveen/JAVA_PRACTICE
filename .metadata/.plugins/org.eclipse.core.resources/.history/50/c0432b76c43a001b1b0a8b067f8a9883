@@ -1,0 +1,15 @@
+import java.io.*;
+public class Bot 
+{
+	public static void main(String args[])
+	{
+		Hey s =new Hey();
+		s.fun(2,3);
+		
+		Hey p =new Hey();
+		p.fun(2,6);
+		s.match(p);
+	System.out.print("hey");
+	}
+
+}

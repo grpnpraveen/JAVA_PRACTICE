@@ -1,0 +1,28 @@
+import java.awt.event.*;
+import javax.swing.*;
+
+
+public class Gui3 implements ActionListener {
+
+	
+	
+	public void go() 
+	{
+		
+	}
+
+	
+	public void actionPerformed(ActionEvent e)
+	{
+		button.setText("YESS");
+	}
+public static void main(String[] args) 
+	{
+		Gui3 g=new Gui3();
+		g.go();
+		
+	}
+
+
+
+}

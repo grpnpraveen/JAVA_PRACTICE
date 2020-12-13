@@ -1,0 +1,36 @@
+package ALLABT_THREADS;
+
+enum mobile//can write enum inside class
+{
+	APPLE,SAMSUNG,HTC;//; may or may not
+	
+	int price;
+	mobile()
+	{
+		System.out.println("constructor");
+	}
+	int getprice()
+	{
+		return price;
+	}
+	
+	
+}
+//class mobile{									created object in the back end for enum like this
+//	static final other APPLE=new other();
+//	static final other SAMSUNG=new other();
+//	static final other HTC=new other();
+//	
+//}
+
+
+public class ENUMS {
+//that is here
+	public static void main(String[] args) {
+		mobile m=mobile.APPLE;//creating enum object
+		System.out.println(m);
+		
+
+	}
+
+}

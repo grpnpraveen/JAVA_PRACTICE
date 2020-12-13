@@ -1,0 +1,20 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
+public class eFlashCards {
+
+	public static void main(String[] args) {
+		
+		
+	}
+   }
+
+import java.awt.*;
+17import java.awt.event.*;
+18import java.io.*;
+19import java.util.ArrayList;
+20import java.util.Scanner;
+21
+22import javax.swing.*;

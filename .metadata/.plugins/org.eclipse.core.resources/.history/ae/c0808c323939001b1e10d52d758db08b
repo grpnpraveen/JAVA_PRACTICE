@@ -1,0 +1,60 @@
+import java.util.Scanner;
+
+class one{
+	int hr,min,sec;
+		public void give()
+			{  		     int x,y,z;
+				Scanner p=new Scanner(System.in);  
+				System.out.println("enter hour:");
+				x=p.nextInt();
+				System.out.println("enter min:");
+				y=p.nextInt();			
+				System.out.println("enter sec:");
+				z=p.nextInt();
+				p.close();
+				hr=x;min=y;sec=z;
+			}
+		public void show()
+		{
+			System.out.println("HOURS:"+hr);
+			System.out.println("MINS:"+min);
+			System.out.println("SECS:"+sec);
+		}
+
+}
+class two extends one{
+	void timeadd(one x,one y)
+	{
+		one z=new one();
+		z.hr=x.hr+y.hr;
+		z.min=x.min+y.min;
+		z.sec=x.sec+y.sec;
+		System.out.println("TOTAL ADDED TIME IS:"+z.hr+":"+z.min+":"+z.sec);
+	}
+	
+	void timesub(one x,one y)
+	{
+		one z=new one();
+		z.hr=x.hr-y.hr;
+		z.min=x.min-y.min;
+		z.sec=x.sec-y.sec;
+		System.out.println("TOTAL ADDED TIME IS:"+z.hr+":"+z.min+":"+z.sec);
+	}
+}
+class timeexam{
+	public static void main(String args[])
+	{
+		one t=new one();
+		one u=new one();
+		t.give();
+		t.show();
+		u.give();
+		u.show();
+		
+		two l =new two();
+		l.timeadd(t,u);
+		System.out.println(t.hr);
+	}
+	
+}
+

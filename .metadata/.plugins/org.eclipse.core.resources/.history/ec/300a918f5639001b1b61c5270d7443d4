@@ -1,0 +1,11 @@
+interface pepople{
+	void add();
+}
+public class Example {
+
+	public static void main(String[] args) {
+		
+
+	}
+
+}

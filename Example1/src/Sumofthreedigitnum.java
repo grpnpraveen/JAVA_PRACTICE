@@ -6,7 +6,7 @@ public class Sumofthreedigitnum {
 	{
 		int n,a,b,d,e;
 		Scanner sc=new Scanner(System.in);
-		System.out.print("Enter the three digit number:");
+		System.out.print("Enter the three digit number or less:");
 		n=sc.nextInt();
 		a=n%10;
 		n=n-a;

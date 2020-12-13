@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;datastructures.linky&apos; to &apos;Linky&apos;&#x0D;&#x0A;- Original project: &apos;datastructuresandalgos&apos;&#x0D;&#x0A;- Original element: &apos;datastructures.linky&apos;&#x0D;&#x0A;- Renamed element: &apos;datastructures.Linky&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;linky&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;datastructures{linky.java[linky" matchStrategy="1" name="Linky" qualified="false" references="true" similarDeclarations="false" stamp="1605524663390" textual="false" version="1.0"/>
+</session>

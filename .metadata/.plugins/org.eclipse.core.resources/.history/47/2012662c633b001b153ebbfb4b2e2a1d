@@ -1,0 +1,24 @@
+package Ones;
+import java.util.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.lang.*;
+import java.io.*;
+
+
+
+
+public class First {
+	static int a=9;
+	static int c;
+	static void rn() {
+		c=a*7;
+	}
+	public static void main(String args[])
+	{
+		
+	
+	}
+
+}
